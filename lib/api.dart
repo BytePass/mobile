@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-import 'package:cryptography/cryptography.dart';
-import 'package:hex/hex.dart';
+import 'package:bytepass/crypto.dart';
 import 'package:http/http.dart' as http;
 
 class AuthArguments {
@@ -17,14 +16,17 @@ class AuthArguments {
 }
 
 class APIClient {
+  /// Instance of the http client.
   static final client = http.Client();
+
+  /// Domain or ip address of the BytePass server.
   static String domain = "localhost:8080";
 
   static Future login(AuthArguments args) async {
     args.email = args.email.toLowerCase();
 
     String masterPassword =
-        await hashMasterPassword(args.email, args.masterPassword);
+        await Cryptography.hashMasterPassword(args.email, args.masterPassword);
 
     var body = json.encode({
       "email": args.email,
@@ -44,7 +46,7 @@ class APIClient {
     args.email = args.email.toLowerCase();
 
     final masterPassword =
-        await hashMasterPassword(args.email, args.masterPassword);
+        await Cryptography.hashMasterPassword(args.email, args.masterPassword);
 
     var body = json.encode({
       "email": args.email,
@@ -61,44 +63,20 @@ class APIClient {
     }
   }
 
-  // Other functions
-
-  static Future<String> hashMasterPassword(
-      String email, String masterPassword) async {
-    final pbkdf2 = Pbkdf2(
-      macAlgorithm: Hmac.sha512(),
-      iterations: 100000,
-      bits: 512,
-    );
-
-    final secretKey = SecretKey(utf8.encode(masterPassword));
-    final salt = utf8.encode(email);
-
-    final newSecretKey = await pbkdf2.deriveKey(
-      secretKey: secretKey,
-      nonce: salt,
-    );
-
-    final hash = await newSecretKey.extractBytes();
-    final hexHash = HEX.encode(hash);
-
-    return hexHash;
-  }
-
+  /// Send request to the BytePass API.
   static Future<http.Response> sendRequest(String url, Object body) async {
+    // set headers to the request
     Map<String, String> headers = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
     };
 
-    var uri = getUri(url);
+    // construct request URI
+    var uri = Uri.http(domain, url);
 
+    // send request, and get the response
     var response = await client.post(uri, body: body, headers: headers);
 
     return response;
-  }
-
-  static Uri getUri(String url) {
-    return Uri.http(domain, url);
   }
 }
