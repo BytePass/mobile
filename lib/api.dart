@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cryptography/cryptography.dart';
 import 'package:hex/hex.dart';
+import 'package:http/http.dart' as http;
 
 class AuthArguments {
   String email;
@@ -16,6 +17,52 @@ class AuthArguments {
 }
 
 class APIClient {
+  static final client = http.Client();
+  static String domain = "localhost:8080";
+
+  static Future login(AuthArguments args) async {
+    args.email = args.email.toLowerCase();
+
+    String masterPassword =
+        await hashMasterPassword(args.email, args.masterPassword);
+
+    var body = json.encode({
+      "email": args.email,
+      "masterPassword": masterPassword,
+    });
+
+    var response = await sendRequest("/api/auth/login", body);
+
+    var responseJson = json.decode(response.body);
+
+    if (responseJson["success"]) {
+      print("Logged in successfully");
+    }
+  }
+
+  static Future register(AuthArguments args) async {
+    args.email = args.email.toLowerCase();
+
+    final masterPassword =
+        await hashMasterPassword(args.email, args.masterPassword);
+
+    var body = json.encode({
+      "email": args.email,
+      "masterPassword": masterPassword,
+      "masterPasswordHint": args.masterPasswordHint ?? "",
+    });
+
+    var response = await sendRequest("/api/auth/register", body);
+
+    var responseJson = json.decode(response.body);
+
+    if (responseJson["success"]) {
+      print("Registered successfully");
+    }
+  }
+
+  // Other functions
+
   static Future<String> hashMasterPassword(
       String email, String masterPassword) async {
     final pbkdf2 = Pbkdf2(
@@ -38,21 +85,20 @@ class APIClient {
     return hexHash;
   }
 
-  static Future<void> login(AuthArguments args) async {
-    // change email to lowercase
-    args.email = args.email.toLowerCase();
+  static Future<http.Response> sendRequest(String url, Object body) async {
+    Map<String, String> headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    };
 
-    final hash = await hashMasterPassword(args.email, args.masterPassword);
+    var uri = getUri(url);
 
-    print(hash);
+    var response = await client.post(uri, body: body, headers: headers);
+
+    return response;
   }
 
-  static Future<void> register(AuthArguments args) async {
-    // change email to lowercase
-    args.email = args.email.toLowerCase();
-
-    final hash = await hashMasterPassword(args.email, args.masterPassword);
-
-    print(hash);
+  static Uri getUri(String url) {
+    return Uri.http(domain, url);
   }
 }
