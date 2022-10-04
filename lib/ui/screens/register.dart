@@ -1,5 +1,3 @@
-import 'dart:isolate';
-
 import 'package:bytepass/api.dart';
 import 'package:bytepass/ui/screens/login.dart';
 import 'package:email_validator/email_validator.dart';
@@ -27,13 +25,39 @@ class RegisterScreenState extends State<RegisterScreen> {
         loadingStuff = true;
       });
 
-      await Isolate.spawn(
-          APIClient.register,
-          AuthArguments(
-            email: emailController.text,
-            masterPassword: masterPasswordController.text,
-            masterPasswordHint: masterPasswordHintController.text,
-          ));
+      final response = await APIClient.register(
+        emailController.text,
+        masterPasswordController.text,
+        masterPasswordHintController.text,
+      );
+
+      if (!mounted) return;
+
+      // show snack bar if error is returned
+      if (!response.success) {
+        final snackBar = SnackBar(content: Text(response.error ?? ""));
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        setState(() {
+          loadingStuff = false;
+        });
+      }
+      // registered successfully, redirect to login page
+      else {
+        const snackBar = SnackBar(
+          content: Text("Registered successfully! Please Sign in now."),
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginScreen(),
+          ),
+        );
+      }
     }
   }
 

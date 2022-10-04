@@ -1,5 +1,3 @@
-import 'dart:isolate';
-
 import 'package:bytepass/api.dart';
 import 'package:bytepass/ui/screens/register.dart';
 import 'package:email_validator/email_validator.dart';
@@ -26,12 +24,28 @@ class LoginScreenState extends State<LoginScreen> {
         loadingStuff = true;
       });
 
-      await Isolate.spawn(
-          APIClient.login,
-          AuthArguments(
-            email: emailController.text,
-            masterPassword: masterPasswordController.text,
-          ));
+      final response = await APIClient.login(
+          emailController.text, masterPasswordController.text);
+
+      if (!mounted) return;
+
+      // show snack bar if error is returned
+      if (!response.success) {
+        final snackBar = SnackBar(content: Text(response.error ?? ""));
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        setState(() {
+          loadingStuff = false;
+        });
+      } else {
+        // get access token from API response
+        final accessToken = response.response["accessToken"];
+
+        final snackBar = SnackBar(content: Text(accessToken));
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
     }
   }
 

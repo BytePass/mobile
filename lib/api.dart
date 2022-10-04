@@ -3,15 +3,15 @@ import 'dart:convert';
 import 'package:bytepass/crypto.dart';
 import 'package:http/http.dart' as http;
 
-class AuthArguments {
-  String email;
-  String masterPassword;
-  String? masterPasswordHint;
+class APIClientReturn {
+  dynamic response;
+  bool success;
+  String? error;
 
-  AuthArguments({
-    required this.email,
-    required this.masterPassword,
-    this.masterPasswordHint,
+  APIClientReturn({
+    this.response,
+    required this.success,
+    this.error,
   });
 }
 
@@ -22,15 +22,16 @@ class APIClient {
   /// Domain or ip address of the BytePass server.
   static String domain = "localhost:8080";
 
-  static Future login(AuthArguments args) async {
-    args.email = args.email.toLowerCase();
+  static Future<APIClientReturn> login(
+      String email, String masterPassword) async {
+    email = email.toLowerCase();
 
-    String masterPassword =
-        await Cryptography.hashMasterPassword(args.email, args.masterPassword);
+    String masterPasswordHash =
+        await Cryptography.hashMasterPasswordIsolated(email, masterPassword);
 
     var body = json.encode({
-      "email": args.email,
-      "masterPassword": masterPassword,
+      "email": email,
+      "masterPassword": masterPasswordHash,
     });
 
     var response = await sendRequest("/api/auth/login", body);
@@ -38,20 +39,26 @@ class APIClient {
     var responseJson = json.decode(response.body);
 
     if (responseJson["success"]) {
-      print("Logged in successfully");
+      return APIClientReturn(success: true, response: responseJson);
     }
+
+    return APIClientReturn(success: false, error: responseJson["message"]);
   }
 
-  static Future register(AuthArguments args) async {
-    args.email = args.email.toLowerCase();
+  static Future<APIClientReturn> register(
+    String email,
+    String masterPassword,
+    String masterPasswordHint,
+  ) async {
+    email = email.toLowerCase();
 
-    final masterPassword =
-        await Cryptography.hashMasterPassword(args.email, args.masterPassword);
+    final masterPasswordHash =
+        await Cryptography.hashMasterPasswordIsolated(email, masterPassword);
 
     var body = json.encode({
-      "email": args.email,
-      "masterPassword": masterPassword,
-      "masterPasswordHint": args.masterPasswordHint ?? "",
+      "email": email,
+      "masterPassword": masterPasswordHash,
+      "masterPasswordHint": masterPasswordHint,
     });
 
     var response = await sendRequest("/api/auth/register", body);
@@ -59,8 +66,10 @@ class APIClient {
     var responseJson = json.decode(response.body);
 
     if (responseJson["success"]) {
-      print("Registered successfully");
+      return APIClientReturn(success: true, response: responseJson);
     }
+
+    return APIClientReturn(success: false, error: responseJson["message"]);
   }
 
   /// Send request to the BytePass API.
