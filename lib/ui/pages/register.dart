@@ -1,5 +1,5 @@
 import 'package:bytepass/api.dart';
-import 'package:bytepass/ui/screens/login.dart';
+import 'package:bytepass/ui/pages/login.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 

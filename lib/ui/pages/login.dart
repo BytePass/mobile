@@ -1,5 +1,7 @@
 import 'package:bytepass/api.dart';
-import 'package:bytepass/ui/screens/register.dart';
+import 'package:bytepass/storage.dart';
+import 'package:bytepass/ui/pages/home.dart';
+import 'package:bytepass/ui/pages/register.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
@@ -24,8 +26,10 @@ class LoginScreenState extends State<LoginScreen> {
         loadingStuff = true;
       });
 
-      final response = await APIClient.login(
-          emailController.text, masterPasswordController.text);
+      String email = emailController.text;
+      String masterPassword = masterPasswordController.text;
+
+      final response = await APIClient.login(email, masterPassword);
 
       if (!mounted) return;
 
@@ -40,11 +44,33 @@ class LoginScreenState extends State<LoginScreen> {
         });
       } else {
         // get access token from API response
-        final accessToken = response.response["accessToken"];
+        String accessToken = response.response["accessToken"];
 
-        final snackBar = SnackBar(content: Text(accessToken));
+        // insert some variables into secure application storage
+        // access token
+        await Storage.insert(
+          key: StorageKey.accessToken,
+          value: accessToken,
+        );
+        // email
+        await Storage.insert(
+          key: StorageKey.email,
+          value: email,
+        );
+        // master password
+        await Storage.insert(
+          key: StorageKey.masterPassword,
+          value: masterPassword,
+        );
 
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        if (!mounted) return;
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomeScreen(),
+          ),
+        );
       }
     }
   }

@@ -1,9 +1,7 @@
-import 'package:bytepass/ui/screens/login.dart';
+import 'package:bytepass/ui/pages/login.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const App());
 
 class ThemeClass {
   static ThemeData lightTheme = ThemeData(
@@ -15,8 +13,8 @@ class ThemeClass {
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
