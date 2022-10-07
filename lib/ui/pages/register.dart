@@ -2,6 +2,7 @@ import "package:bytepass/api.dart";
 import "package:bytepass/ui/pages/login.dart";
 import "package:email_validator/email_validator.dart";
 import "package:flutter/material.dart";
+import "package:flutter_locales/flutter_locales.dart";
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -46,8 +47,8 @@ class RegisterScreenState extends State<RegisterScreen> {
         }
         // registered successfully, redirect to login page
         else {
-          const snackBar = SnackBar(
-            content: Text("Registered successfully! Please Sign in now."),
+          final snackBar = SnackBar(
+            content: Text(context.localeString("register_successfully_toast")),
           );
 
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -63,7 +64,7 @@ class RegisterScreenState extends State<RegisterScreen> {
         final snackBar = SnackBar(
           content: Text(error.toString()),
           action: SnackBarAction(
-            label: "Retry",
+            label: context.localeString("toast_retry"),
             onPressed: _handleRegister,
           ),
         );
@@ -94,9 +95,9 @@ class RegisterScreenState extends State<RegisterScreen> {
             ),
 
             // Title text
-            const Text(
-              "Sign up",
-              style: TextStyle(
+            Text(
+              context.localeString("register_page_title"),
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 40,
               ),
@@ -115,7 +116,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                     controller: emailController,
                     validator: (value) => EmailValidator.validate(value!)
                         ? null
-                        : "Please enter a valid email",
+                        : context.localeString("auth_invalid_email"),
                     maxLines: 1,
                     decoration: InputDecoration(
                       hintText: "Email",
@@ -134,11 +135,13 @@ class RegisterScreenState extends State<RegisterScreen> {
                     controller: masterPasswordController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Please enter your master password";
+                        return context
+                            .localeString("auth_empty_master_password");
                       }
 
                       if (value.length < 8) {
-                        return "Password must be at least 8 characters long";
+                        return context
+                            .localeString("auth_too_short_master_password");
                       }
 
                       return null;
@@ -161,11 +164,13 @@ class RegisterScreenState extends State<RegisterScreen> {
                   TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Please enter your master password";
+                        return context
+                            .localeString("auth_empty_master_password");
                       }
 
                       if (value != masterPasswordController.text) {
-                        return "Passwords aren't the same";
+                        return context
+                            .localeString("auth_match_master_password");
                       }
 
                       return null;
@@ -174,7 +179,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                     obscureText: true,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock),
-                      hintText: "Re-type Master Password",
+                      hintText: context.localeString(
+                          "register_password_master_password_retype"),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -190,7 +196,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                     maxLines: 1,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.password),
-                      hintText: "Master Password hint (optional)",
+                      hintText: context.localeString(
+                          "register_password_master_password_hint"),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -208,9 +215,9 @@ class RegisterScreenState extends State<RegisterScreen> {
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
                           ),
-                          child: const Text(
-                            "Sign up",
-                            style: TextStyle(
+                          child: Text(
+                            context.localeString("register_page_button"),
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -222,7 +229,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Already registered?"),
+                      Text(context.localeString("auth_already_registered")),
                       TextButton(
                         onPressed: () {
                           Navigator.pushReplacement(
@@ -232,7 +239,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                             ),
                           );
                         },
-                        child: const Text("Sign in"),
+                        child: Text(context
+                            .localeString("auth_already_registered_link")),
                       ),
                     ],
                   ),

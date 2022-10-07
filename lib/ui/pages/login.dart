@@ -4,6 +4,7 @@ import "package:bytepass/ui/pages/home.dart";
 import "package:bytepass/ui/pages/register.dart";
 import "package:email_validator/email_validator.dart";
 import "package:flutter/material.dart";
+import "package:flutter_locales/flutter_locales.dart";
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -77,7 +78,7 @@ class LoginScreenState extends State<LoginScreen> {
         final snackBar = SnackBar(
           content: Text(error.toString()),
           action: SnackBarAction(
-            label: "Retry",
+            label: context.localeString("toast_retry"),
             onPressed: _handleLogin,
           ),
         );
@@ -107,9 +108,9 @@ class LoginScreenState extends State<LoginScreen> {
             ),
 
             // Title
-            const Text(
-              "Log in",
-              style: TextStyle(
+            Text(
+              context.localeString("login_page_title"),
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 35,
               ),
@@ -127,7 +128,7 @@ class LoginScreenState extends State<LoginScreen> {
                     controller: emailController,
                     validator: (value) => EmailValidator.validate(value!)
                         ? null
-                        : "Please enter a valid email",
+                        : context.localeString("auth_invalid_email"),
                     maxLines: 1,
                     decoration: InputDecoration(
                       hintText: "Email",
@@ -146,11 +147,13 @@ class LoginScreenState extends State<LoginScreen> {
                     controller: masterPasswordController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Please enter your master password";
+                        return context
+                            .localeString("auth_empty_master_password");
                       }
 
                       if (value.length < 8) {
-                        return "Password must be at least 8 characters long";
+                        return context
+                            .localeString("auth_too_short_master_password");
                       }
 
                       return null;
@@ -177,9 +180,9 @@ class LoginScreenState extends State<LoginScreen> {
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
                           ),
-                          child: const Text(
-                            "Sign in",
-                            style: TextStyle(
+                          child: Text(
+                            context.localeString("login_page_button"),
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -191,7 +194,8 @@ class LoginScreenState extends State<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Not registered yet?"),
+                      Text(
+                          context.localeString("auth_not_registered_question")),
                       TextButton(
                         onPressed: () {
                           Navigator.pushReplacement(
@@ -201,7 +205,8 @@ class LoginScreenState extends State<LoginScreen> {
                             ),
                           );
                         },
-                        child: const Text("Create an account"),
+                        child: Text(
+                            context.localeString("auth_not_registered_link")),
                       ),
                     ],
                   ),

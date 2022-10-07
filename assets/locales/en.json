@@ -1,0 +1,18 @@
+{
+    "login_page_title": "Log in",
+    "login_page_button": "Sign in",
+    "register_page_title": "Sign up",
+    "register_page_button": "Sign up",
+    "register_password_master_password_retype": "Re-type Master Password",
+    "register_password_master_password_hint": "Master Password hint (optional)",
+    "auth_invalid_email": "Please enter a valid email",
+    "auth_empty_master_password": "Please enter your master password",
+    "auth_too_short_master_password": "Master password must be at least 8 characters long",
+    "auth_match_master_password": "Master passwords aren't the same",
+    "auth_not_registered_question": "Not registered yet?",
+    "auth_not_registered_link": "Create an account",
+    "auth_already_registered": "Already registered?",
+    "auth_already_registered_link": "Sign in",
+    "register_successfully_toast": "Registered successfully! Please Sign in now.",
+    "toast_retry": "Retry"
+}

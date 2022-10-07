@@ -1,7 +1,13 @@
 import "package:bytepass/ui/pages/login.dart";
 import "package:flutter/material.dart";
+import "package:flutter_locales/flutter_locales.dart";
 
-void main() => runApp(const App());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Locales.init(["en"]);
+
+  runApp(const App());
+}
 
 class ThemeClass {
   static ThemeData lightTheme = ThemeData(
@@ -18,12 +24,17 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "BytePass",
-      themeMode: ThemeMode.system,
-      theme: ThemeClass.lightTheme,
-      darkTheme: ThemeClass.darkTheme,
-      home: const LoginScreen(),
+    return LocaleBuilder(
+      builder: (locale) => MaterialApp(
+        title: "BytePass",
+        themeMode: ThemeMode.system,
+        theme: ThemeClass.lightTheme,
+        darkTheme: ThemeClass.darkTheme,
+        home: const LoginScreen(),
+        localizationsDelegates: Locales.delegates,
+        supportedLocales: Locales.supportedLocales,
+        locale: locale,
+      ),
     );
   }
 }
