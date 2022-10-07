@@ -1,7 +1,7 @@
-import 'package:bytepass/api.dart';
-import 'package:bytepass/ui/pages/login.dart';
-import 'package:email_validator/email_validator.dart';
-import 'package:flutter/material.dart';
+import "package:bytepass/api.dart";
+import "package:bytepass/ui/pages/login.dart";
+import "package:email_validator/email_validator.dart";
+import "package:flutter/material.dart";
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -25,38 +25,55 @@ class RegisterScreenState extends State<RegisterScreen> {
         loadingStuff = true;
       });
 
-      final response = await APIClient.register(
-        emailController.text,
-        masterPasswordController.text,
-        masterPasswordHintController.text,
-      );
+      try {
+        final response = await APIClient.register(
+          emailController.text,
+          masterPasswordController.text,
+          masterPasswordHintController.text,
+        );
 
-      if (!mounted) return;
+        if (!mounted) return;
 
-      // show snack bar if error is returned
-      if (!response.success) {
-        final snackBar = SnackBar(content: Text(response.error ?? ""));
+        // show snack bar if error is returned
+        if (!response.success) {
+          final snackBar = SnackBar(content: Text(response.error ?? ""));
 
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+          setState(() {
+            loadingStuff = false;
+          });
+        }
+        // registered successfully, redirect to login page
+        else {
+          const snackBar = SnackBar(
+            content: Text("Registered successfully! Please Sign in now."),
+          );
+
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const LoginScreen(),
+            ),
+          );
+        }
+      } catch (error) {
+        final snackBar = SnackBar(
+          content: Text(error.toString()),
+          action: SnackBarAction(
+            label: "Retry",
+            onPressed: _handleRegister,
+          ),
+        );
+
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
         setState(() {
           loadingStuff = false;
         });
-      }
-      // registered successfully, redirect to login page
-      else {
-        const snackBar = SnackBar(
-          content: Text("Registered successfully! Please Sign in now."),
-        );
-
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const LoginScreen(),
-          ),
-        );
       }
     }
   }
@@ -78,7 +95,7 @@ class RegisterScreenState extends State<RegisterScreen> {
 
             // Title text
             const Text(
-              'Sign up',
+              "Sign up",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 40,
@@ -101,7 +118,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                         : "Please enter a valid email",
                     maxLines: 1,
                     decoration: InputDecoration(
-                      hintText: 'Email',
+                      hintText: "Email",
                       prefixIcon: const Icon(Icons.email),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -117,7 +134,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                     controller: masterPasswordController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your master password';
+                        return "Please enter your master password";
                       }
                       return null;
                     },
@@ -125,7 +142,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                     obscureText: true,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock),
-                      hintText: 'Master Password',
+                      hintText: "Master Password",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -139,7 +156,11 @@ class RegisterScreenState extends State<RegisterScreen> {
                   TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your master password';
+                        return "Please enter your master password";
+                      }
+
+                      if (value.length < 8) {
+                        return "Password must be at least 8 characters long";
                       }
 
                       if (value != masterPasswordController.text) {
@@ -152,7 +173,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                     obscureText: true,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock),
-                      hintText: 'Re-type Master Password',
+                      hintText: "Re-type Master Password",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -168,7 +189,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                     maxLines: 1,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.password),
-                      hintText: 'Master Password hint (optional)',
+                      hintText: "Master Password hint (optional)",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -187,7 +208,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                             padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
                           ),
                           child: const Text(
-                            'Sign up',
+                            "Sign up",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -200,7 +221,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('Already registered?'),
+                      const Text("Already registered?"),
                       TextButton(
                         onPressed: () {
                           Navigator.pushReplacement(
@@ -210,7 +231,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                             ),
                           );
                         },
-                        child: const Text('Sign in'),
+                        child: const Text("Sign in"),
                       ),
                     ],
                   ),

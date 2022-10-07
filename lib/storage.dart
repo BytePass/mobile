@@ -1,4 +1,4 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import "package:flutter_secure_storage/flutter_secure_storage.dart";
 
 class Storage {
   /// Instance of secure application storage.

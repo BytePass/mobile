@@ -1,7 +1,7 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:bytepass/crypto.dart';
-import 'package:http/http.dart' as http;
+import "package:bytepass/crypto.dart";
+import "package:http/http.dart" as http;
 
 class APIClientReturn {
   dynamic response;
@@ -76,8 +76,8 @@ class APIClient {
   static Future<http.Response> sendRequest(String url, Object body) async {
     // set headers to the request
     Map<String, String> headers = {
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
+      "Content-type": "application/json",
+      "Accept": "application/json",
     };
 
     // construct request URI

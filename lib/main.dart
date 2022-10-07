@@ -1,5 +1,5 @@
-import 'package:bytepass/ui/pages/login.dart';
-import 'package:flutter/material.dart';
+import "package:bytepass/ui/pages/login.dart";
+import "package:flutter/material.dart";
 
 void main() => runApp(const App());
 
@@ -19,7 +19,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'BytePass',
+      title: "BytePass",
       themeMode: ThemeMode.system,
       theme: ThemeClass.lightTheme,
       darkTheme: ThemeClass.darkTheme,

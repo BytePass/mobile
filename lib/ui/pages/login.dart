@@ -1,9 +1,9 @@
-import 'package:bytepass/api.dart';
-import 'package:bytepass/storage.dart';
-import 'package:bytepass/ui/pages/home.dart';
-import 'package:bytepass/ui/pages/register.dart';
-import 'package:email_validator/email_validator.dart';
-import 'package:flutter/material.dart';
+import "package:bytepass/api.dart";
+import "package:bytepass/storage.dart";
+import "package:bytepass/ui/pages/home.dart";
+import "package:bytepass/ui/pages/register.dart";
+import "package:email_validator/email_validator.dart";
+import "package:flutter/material.dart";
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -29,48 +29,64 @@ class LoginScreenState extends State<LoginScreen> {
       String email = emailController.text;
       String masterPassword = masterPasswordController.text;
 
-      final response = await APIClient.login(email, masterPassword);
+      try {
+        final response = await APIClient.login(email, masterPassword);
 
-      if (!mounted) return;
+        // show snack bar if error is returned
+        if (!response.success) {
+          final snackBar = SnackBar(content: Text(response.error ?? ""));
 
-      // show snack bar if error is returned
-      if (!response.success) {
-        final snackBar = SnackBar(content: Text(response.error ?? ""));
+          if (!mounted) return;
+
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+          setState(() {
+            loadingStuff = false;
+          });
+        } else {
+          // get access token from API response
+          String accessToken = response.response["accessToken"];
+
+          // insert some variables into secure application storage
+          // access token
+          await Storage.insert(
+            key: StorageKey.accessToken,
+            value: accessToken,
+          );
+          // email
+          await Storage.insert(
+            key: StorageKey.email,
+            value: email,
+          );
+          // master password
+          await Storage.insert(
+            key: StorageKey.masterPassword,
+            value: masterPassword,
+          );
+
+          if (!mounted) return;
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomeScreen(),
+            ),
+          );
+        }
+      } catch (error) {
+        final snackBar = SnackBar(
+          content: Text(error.toString()),
+          action: SnackBarAction(
+            label: "Retry",
+            onPressed: _handleLogin,
+          ),
+        );
 
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
         setState(() {
           loadingStuff = false;
         });
-      } else {
-        // get access token from API response
-        String accessToken = response.response["accessToken"];
-
-        // insert some variables into secure application storage
-        // access token
-        await Storage.insert(
-          key: StorageKey.accessToken,
-          value: accessToken,
-        );
-        // email
-        await Storage.insert(
-          key: StorageKey.email,
-          value: email,
-        );
-        // master password
-        await Storage.insert(
-          key: StorageKey.masterPassword,
-          value: masterPassword,
-        );
-
-        if (!mounted) return;
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
-          ),
-        );
       }
     }
   }
@@ -92,7 +108,7 @@ class LoginScreenState extends State<LoginScreen> {
 
             // Title
             const Text(
-              'Log in',
+              "Log in",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 35,
@@ -114,7 +130,7 @@ class LoginScreenState extends State<LoginScreen> {
                         : "Please enter a valid email",
                     maxLines: 1,
                     decoration: InputDecoration(
-                      hintText: 'Email',
+                      hintText: "Email",
                       prefixIcon: const Icon(Icons.email),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -130,7 +146,7 @@ class LoginScreenState extends State<LoginScreen> {
                     controller: masterPasswordController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your master password';
+                        return "Please enter your master password";
                       }
                       return null;
                     },
@@ -138,7 +154,7 @@ class LoginScreenState extends State<LoginScreen> {
                     obscureText: true,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock),
-                      hintText: 'Master Password',
+                      hintText: "Master Password",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -157,7 +173,7 @@ class LoginScreenState extends State<LoginScreen> {
                             padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
                           ),
                           child: const Text(
-                            'Sign in',
+                            "Sign in",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -170,7 +186,7 @@ class LoginScreenState extends State<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('Not registered yet?'),
+                      const Text("Not registered yet?"),
                       TextButton(
                         onPressed: () {
                           Navigator.pushReplacement(
@@ -180,7 +196,7 @@ class LoginScreenState extends State<LoginScreen> {
                             ),
                           );
                         },
-                        child: const Text('Create an account'),
+                        child: const Text("Create an account"),
                       ),
                     ],
                   ),
