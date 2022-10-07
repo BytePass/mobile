@@ -136,6 +136,11 @@ class RegisterScreenState extends State<RegisterScreen> {
                       if (value == null || value.isEmpty) {
                         return "Please enter your master password";
                       }
+
+                      if (value.length < 8) {
+                        return "Password must be at least 8 characters long";
+                      }
+
                       return null;
                     },
                     maxLines: 1,
@@ -157,10 +162,6 @@ class RegisterScreenState extends State<RegisterScreen> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Please enter your master password";
-                      }
-
-                      if (value.length < 8) {
-                        return "Password must be at least 8 characters long";
                       }
 
                       if (value != masterPasswordController.text) {
