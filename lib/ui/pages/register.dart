@@ -1,5 +1,6 @@
 import 'package:bytepass/api.dart';
 import 'package:bytepass/ui/pages/login.dart';
+import 'package:bytepass/utils.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -47,11 +48,10 @@ class RegisterPageState extends State<RegisterPage> {
         }
         // registered successfully, redirect to login page
         else {
-          final snackBar = SnackBar(
-            content: Text(context.localeString('register_successfully_toast')),
+          Utils.showSnackBar(
+            context,
+            content: context.localeString('register_successfully_toast'),
           );
-
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
           Navigator.pushReplacement(
             context,
@@ -61,16 +61,11 @@ class RegisterPageState extends State<RegisterPage> {
           );
         }
       } catch (error) {
-        final snackBar = SnackBar(
-          content: Text(error.toString()),
-          action: SnackBarAction(
-            label: context.localeString('toast_retry'),
-            onPressed: _handleRegister,
-          ),
+        Utils.showSnackBar(
+          context,
+          content: context.localeString('toast_retry'),
+          retryAction: _handleRegister,
         );
-
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
         setState(() {
           loadingStuff = false;

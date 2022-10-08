@@ -2,6 +2,7 @@ import 'package:bytepass/api.dart';
 import 'package:bytepass/storage.dart';
 import 'package:bytepass/ui/pages/home.dart';
 import 'package:bytepass/ui/pages/register.dart';
+import 'package:bytepass/utils.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -35,11 +36,13 @@ class LoginPageState extends State<LoginPage> {
 
         // show snack bar if error is returned
         if (!response.success) {
-          final snackBar = SnackBar(content: Text(response.error ?? ''));
-
           if (!mounted) return;
 
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          Utils.showSnackBar(
+            context,
+            content: response.error.toString(),
+            retryAction: _handleLogin,
+          );
 
           setState(() {
             loadingStuff = false;
@@ -75,15 +78,11 @@ class LoginPageState extends State<LoginPage> {
           );
         }
       } catch (error) {
-        final snackBar = SnackBar(
-          content: Text(error.toString()),
-          action: SnackBarAction(
-            label: context.localeString('toast_retry'),
-            onPressed: _handleLogin,
-          ),
+        Utils.showSnackBar(
+          context,
+          content: error.toString(),
+          retryAction: _handleLogin,
         );
-
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
         setState(() {
           loadingStuff = false;

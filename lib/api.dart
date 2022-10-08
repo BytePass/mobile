@@ -34,7 +34,7 @@ class APIClient {
       'masterPassword': masterPasswordHash,
     });
 
-    var response = await sendRequest('/api/auth/login', body);
+    var response = await sendRequest('/api/auth/login', body: body);
 
     var responseJson = json.decode(response.body);
 
@@ -61,7 +61,20 @@ class APIClient {
       'masterPasswordHint': masterPasswordHint,
     });
 
-    var response = await sendRequest('/api/auth/register', body);
+    var response = await sendRequest('/api/auth/register', body: body);
+
+    var responseJson = json.decode(response.body);
+
+    if (responseJson['success']) {
+      return APIClientReturn(success: true, response: responseJson);
+    }
+
+    return APIClientReturn(success: false, error: responseJson['message']);
+  }
+
+  static Future<APIClientReturn> whoami(String accessToken) async {
+    var response =
+        await sendRequest('/api/user/whoami', accessToken: accessToken);
 
     var responseJson = json.decode(response.body);
 
@@ -73,18 +86,32 @@ class APIClient {
   }
 
   /// Send request to the BytePass API.
-  static Future<http.Response> sendRequest(String url, Object body) async {
+  static Future<http.Response> sendRequest(
+    String url, {
+    Object? body,
+    String? accessToken,
+  }) async {
     // set headers to the request
     Map<String, String> headers = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
     };
 
+    if (accessToken != null) {
+      headers.putIfAbsent('Authorization', () => 'Bearer $accessToken');
+    }
+
     // construct request URI
     var uri = Uri.http(domain, url);
 
     // send request, and get the response
-    var response = await client.post(uri, body: body, headers: headers);
+    http.Response response;
+
+    if (body != null) {
+      response = await client.post(uri, body: body, headers: headers);
+    } else {
+      response = await client.get(uri, headers: headers);
+    }
 
     return response;
   }

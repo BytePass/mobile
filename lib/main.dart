@@ -8,11 +8,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Locales.init(['en']);
 
-  final email = await Storage.read(key: StorageKey.email);
+  final accessToken = await Storage.read(key: StorageKey.accessToken);
 
   bool loggedIn = false;
 
-  if (email != null) {
+  if (accessToken != null) {
     loggedIn = true;
   }
 
