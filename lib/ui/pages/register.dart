@@ -1,17 +1,17 @@
-import "package:bytepass/api.dart";
-import "package:bytepass/ui/pages/login.dart";
-import "package:email_validator/email_validator.dart";
-import "package:flutter/material.dart";
-import "package:flutter_locales/flutter_locales.dart";
+import 'package:bytepass/api.dart';
+import 'package:bytepass/ui/pages/login.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<RegisterScreen> createState() => RegisterScreenState();
+  State<RegisterPage> createState() => RegisterPageState();
 }
 
-class RegisterScreenState extends State<RegisterScreen> {
+class RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController emailController = TextEditingController();
@@ -37,7 +37,7 @@ class RegisterScreenState extends State<RegisterScreen> {
 
         // show snack bar if error is returned
         if (!response.success) {
-          final snackBar = SnackBar(content: Text(response.error ?? ""));
+          final snackBar = SnackBar(content: Text(response.error ?? ''));
 
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
@@ -48,7 +48,7 @@ class RegisterScreenState extends State<RegisterScreen> {
         // registered successfully, redirect to login page
         else {
           final snackBar = SnackBar(
-            content: Text(context.localeString("register_successfully_toast")),
+            content: Text(context.localeString('register_successfully_toast')),
           );
 
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -56,7 +56,7 @@ class RegisterScreenState extends State<RegisterScreen> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const LoginScreen(),
+              builder: (context) => const LoginPage(),
             ),
           );
         }
@@ -64,7 +64,7 @@ class RegisterScreenState extends State<RegisterScreen> {
         final snackBar = SnackBar(
           content: Text(error.toString()),
           action: SnackBarAction(
-            label: context.localeString("toast_retry"),
+            label: context.localeString('toast_retry'),
             onPressed: _handleRegister,
           ),
         );
@@ -96,7 +96,7 @@ class RegisterScreenState extends State<RegisterScreen> {
 
             // Title text
             Text(
-              context.localeString("register_page_title"),
+              context.localeString('register_page_title'),
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 40,
@@ -116,10 +116,10 @@ class RegisterScreenState extends State<RegisterScreen> {
                     controller: emailController,
                     validator: (value) => EmailValidator.validate(value!)
                         ? null
-                        : context.localeString("auth_invalid_email"),
+                        : context.localeString('auth_invalid_email'),
                     maxLines: 1,
                     decoration: InputDecoration(
-                      hintText: "Email",
+                      hintText: 'Email',
                       prefixIcon: const Icon(Icons.email),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -136,12 +136,12 @@ class RegisterScreenState extends State<RegisterScreen> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return context
-                            .localeString("auth_empty_master_password");
+                            .localeString('auth_empty_master_password');
                       }
 
                       if (value.length < 8) {
                         return context
-                            .localeString("auth_too_short_master_password");
+                            .localeString('auth_too_short_master_password');
                       }
 
                       return null;
@@ -150,7 +150,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                     obscureText: true,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock),
-                      hintText: "Master Password",
+                      hintText: 'Master Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -165,12 +165,12 @@ class RegisterScreenState extends State<RegisterScreen> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return context
-                            .localeString("auth_empty_master_password");
+                            .localeString('auth_empty_master_password');
                       }
 
                       if (value != masterPasswordController.text) {
                         return context
-                            .localeString("auth_match_master_password");
+                            .localeString('auth_match_master_password');
                       }
 
                       return null;
@@ -180,7 +180,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock),
                       hintText: context.localeString(
-                          "register_password_master_password_retype"),
+                          'register_password_master_password_retype'),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -197,7 +197,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.password),
                       hintText: context.localeString(
-                          "register_password_master_password_hint"),
+                          'register_password_master_password_hint'),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -216,7 +216,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                             padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
                           ),
                           child: Text(
-                            context.localeString("register_page_button"),
+                            context.localeString('register_page_button'),
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -229,18 +229,18 @@ class RegisterScreenState extends State<RegisterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(context.localeString("auth_already_registered")),
+                      Text(context.localeString('auth_already_registered')),
                       TextButton(
                         onPressed: () {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const LoginScreen(),
+                              builder: (context) => const LoginPage(),
                             ),
                           );
                         },
                         child: Text(context
-                            .localeString("auth_already_registered_link")),
+                            .localeString('auth_already_registered_link')),
                       ),
                     ],
                   ),

@@ -1,8 +1,8 @@
-import "dart:convert";
-import "dart:isolate";
+import 'dart:convert';
+import 'dart:isolate';
 
-import "package:cryptography/cryptography.dart";
-import "package:hex/hex.dart";
+import 'package:cryptography/cryptography.dart';
+import 'package:hex/hex.dart';
 
 class HashMasterPasswordArguments {
   String email;

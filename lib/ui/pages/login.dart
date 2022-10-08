@@ -1,19 +1,19 @@
-import "package:bytepass/api.dart";
-import "package:bytepass/storage.dart";
-import "package:bytepass/ui/pages/home.dart";
-import "package:bytepass/ui/pages/register.dart";
-import "package:email_validator/email_validator.dart";
-import "package:flutter/material.dart";
-import "package:flutter_locales/flutter_locales.dart";
+import 'package:bytepass/api.dart';
+import 'package:bytepass/storage.dart';
+import 'package:bytepass/ui/pages/home.dart';
+import 'package:bytepass/ui/pages/register.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<LoginScreen> createState() => LoginScreenState();
+  State<LoginPage> createState() => LoginPageState();
 }
 
-class LoginScreenState extends State<LoginScreen> {
+class LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController emailController = TextEditingController();
@@ -35,7 +35,7 @@ class LoginScreenState extends State<LoginScreen> {
 
         // show snack bar if error is returned
         if (!response.success) {
-          final snackBar = SnackBar(content: Text(response.error ?? ""));
+          final snackBar = SnackBar(content: Text(response.error ?? ''));
 
           if (!mounted) return;
 
@@ -46,7 +46,7 @@ class LoginScreenState extends State<LoginScreen> {
           });
         } else {
           // get access token from API response
-          String accessToken = response.response["accessToken"];
+          String accessToken = response.response['accessToken'];
 
           // insert some variables into secure application storage
           // access token
@@ -70,7 +70,7 @@ class LoginScreenState extends State<LoginScreen> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
+              builder: (context) => const HomePage(),
             ),
           );
         }
@@ -78,7 +78,7 @@ class LoginScreenState extends State<LoginScreen> {
         final snackBar = SnackBar(
           content: Text(error.toString()),
           action: SnackBarAction(
-            label: context.localeString("toast_retry"),
+            label: context.localeString('toast_retry'),
             onPressed: _handleLogin,
           ),
         );
@@ -109,7 +109,7 @@ class LoginScreenState extends State<LoginScreen> {
 
             // Title
             Text(
-              context.localeString("login_page_title"),
+              context.localeString('login_page_title'),
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 35,
@@ -128,10 +128,10 @@ class LoginScreenState extends State<LoginScreen> {
                     controller: emailController,
                     validator: (value) => EmailValidator.validate(value!)
                         ? null
-                        : context.localeString("auth_invalid_email"),
+                        : context.localeString('auth_invalid_email'),
                     maxLines: 1,
                     decoration: InputDecoration(
-                      hintText: "Email",
+                      hintText: 'Email',
                       prefixIcon: const Icon(Icons.email),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -148,12 +148,12 @@ class LoginScreenState extends State<LoginScreen> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return context
-                            .localeString("auth_empty_master_password");
+                            .localeString('auth_empty_master_password');
                       }
 
                       if (value.length < 8) {
                         return context
-                            .localeString("auth_too_short_master_password");
+                            .localeString('auth_too_short_master_password');
                       }
 
                       return null;
@@ -162,7 +162,7 @@ class LoginScreenState extends State<LoginScreen> {
                     obscureText: true,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock),
-                      hintText: "Master Password",
+                      hintText: 'Master Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -181,7 +181,7 @@ class LoginScreenState extends State<LoginScreen> {
                             padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
                           ),
                           child: Text(
-                            context.localeString("login_page_button"),
+                            context.localeString('login_page_button'),
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -195,18 +195,18 @@ class LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                          context.localeString("auth_not_registered_question")),
+                          context.localeString('auth_not_registered_question')),
                       TextButton(
                         onPressed: () {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const RegisterScreen(),
+                              builder: (context) => const RegisterPage(),
                             ),
                           );
                         },
                         child: Text(
-                            context.localeString("auth_not_registered_link")),
+                            context.localeString('auth_not_registered_link')),
                       ),
                     ],
                   ),

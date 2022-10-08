@@ -1,26 +1,53 @@
-import "package:bytepass/storage.dart";
-import "package:flutter/material.dart";
+import 'package:bytepass/storage.dart';
+import 'package:bytepass/ui/pages/login.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<HomeScreen> createState() => HomeScreenState();
+  State<HomePage> createState() => HomePageState();
 }
 
-class HomeScreenState extends State<HomeScreen> {
+class HomePageState extends State<HomePage> {
   bool loadingStuff = true;
 
-  String email = "";
+  String email = '';
 
   @override
   initState() {
     super.initState();
 
-    setState(() async {
+    _init();
+  }
+
+  goToLoginPage() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const LoginPage(),
+      ),
+    );
+  }
+
+  Future _init() async {
+    final storageEmail = await Storage.read(key: StorageKey.email);
+
+    if (storageEmail == null) {
+      goToLoginPage();
+    }
+
+    setState(() {
       loadingStuff = false;
-      email = await Storage.read(key: StorageKey.email) ?? "";
+      email = storageEmail ?? '';
     });
+  }
+
+  Future _handleLogout() async {
+    await Storage.deleteAll();
+
+    goToLoginPage();
   }
 
   @override
@@ -37,10 +64,27 @@ class HomeScreenState extends State<HomeScreen> {
                 ? const Center(child: CircularProgressIndicator())
                 : Center(
                     child: Text(
-                      "Hello $email",
+                      'Hello $email',
                       textAlign: TextAlign.center,
                     ),
                   ),
+            const SizedBox(
+              height: 20,
+            ),
+
+            // Log out button
+            ElevatedButton(
+              onPressed: _handleLogout,
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
+              ),
+              child: Text(
+                context.localeString('logout_button'),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ],
         ),
       ),

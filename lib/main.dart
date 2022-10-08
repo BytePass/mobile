@@ -1,12 +1,22 @@
-import "package:bytepass/ui/pages/login.dart";
-import "package:flutter/material.dart";
-import "package:flutter_locales/flutter_locales.dart";
+import 'package:bytepass/storage.dart';
+import 'package:bytepass/ui/pages/home.dart';
+import 'package:bytepass/ui/pages/login.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Locales.init(["en"]);
+  await Locales.init(['en']);
 
-  runApp(const App());
+  final email = await Storage.read(key: StorageKey.email);
+
+  bool loggedIn = false;
+
+  if (email != null) {
+    loggedIn = true;
+  }
+
+  runApp(App(loggedIn: loggedIn));
 }
 
 class ThemeClass {
@@ -20,17 +30,19 @@ class ThemeClass {
 }
 
 class App extends StatelessWidget {
-  const App({super.key});
+  final bool loggedIn;
+
+  const App({super.key, required this.loggedIn});
 
   @override
   Widget build(BuildContext context) {
     return LocaleBuilder(
       builder: (locale) => MaterialApp(
-        title: "BytePass",
+        title: 'BytePass',
         themeMode: ThemeMode.system,
         theme: ThemeClass.lightTheme,
         darkTheme: ThemeClass.darkTheme,
-        home: const LoginScreen(),
+        home: loggedIn ? const HomePage() : const LoginPage(),
         localizationsDelegates: Locales.delegates,
         supportedLocales: Locales.supportedLocales,
         locale: locale,

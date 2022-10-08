@@ -22,7 +22,7 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
-    prefer_double_quotes: true
+    prefer_single_quotes: true
     # Put a single newline at end of file.
     eol_at_end_of_file: true
 

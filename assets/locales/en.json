@@ -14,5 +14,6 @@
     "auth_already_registered": "Already registered?",
     "auth_already_registered_link": "Sign in",
     "register_successfully_toast": "Registered successfully! Please Sign in now.",
+    "logout_button": "Log out",
     "toast_retry": "Retry"
 }
