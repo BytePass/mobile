@@ -1,3 +1,6 @@
+import 'package:bytepass/ui/pages/home.dart';
+import 'package:bytepass/ui/pages/login.dart';
+import 'package:bytepass/ui/pages/register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
@@ -22,5 +25,31 @@ class Utils {
     }
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+}
+
+class NavigatorPage {
+  static void to(BuildContext context, Widget page) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => page,
+      ),
+    );
+  }
+
+  /// Navigate to [LoginPage].
+  static void login(BuildContext context) {
+    to(context, const LoginPage());
+  }
+
+  /// Navigate to [RegisterPage].
+  static void register(BuildContext context) {
+    to(context, const RegisterPage());
+  }
+
+  /// Navigate to [HomePage].
+  static void home(BuildContext context) {
+    to(context, const HomePage());
   }
 }

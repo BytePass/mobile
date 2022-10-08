@@ -1,6 +1,5 @@
 import 'package:bytepass/api.dart';
 import 'package:bytepass/storage.dart';
-import 'package:bytepass/ui/pages/login.dart';
 import 'package:bytepass/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -28,7 +27,9 @@ class HomePageState extends State<HomePage> {
     final accessToken = await Storage.read(key: StorageKey.accessToken);
 
     if (storageEmail == null || accessToken == null) {
-      return goToLoginPage();
+      if (mounted) NavigatorPage.login(context);
+
+      return;
     }
 
     try {
@@ -42,7 +43,9 @@ class HomePageState extends State<HomePage> {
           content: response.error.toString(),
         );
 
-        return goToLoginPage();
+        if (mounted) NavigatorPage.login(context);
+
+        return;
       }
     } catch (error) {
       if (!mounted) return;
@@ -59,19 +62,10 @@ class HomePageState extends State<HomePage> {
     });
   }
 
-  goToLoginPage() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const LoginPage(),
-      ),
-    );
-  }
-
   Future _handleLogout() async {
     await Storage.deleteAll();
 
-    goToLoginPage();
+    if (mounted) NavigatorPage.login(context);
   }
 
   @override

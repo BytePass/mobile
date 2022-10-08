@@ -1,7 +1,5 @@
 import 'package:bytepass/api.dart';
 import 'package:bytepass/storage.dart';
-import 'package:bytepass/ui/pages/home.dart';
-import 'package:bytepass/ui/pages/register.dart';
 import 'package:bytepass/utils.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -68,14 +66,7 @@ class LoginPageState extends State<LoginPage> {
             value: masterPassword,
           );
 
-          if (!mounted) return;
-
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomePage(),
-            ),
-          );
+          if (mounted) NavigatorPage.home(context);
         }
       } catch (error) {
         Utils.showSnackBar(
@@ -146,13 +137,15 @@ class LoginPageState extends State<LoginPage> {
                     controller: masterPasswordController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return context
-                            .localeString('auth_empty_master_password');
+                        return context.localeString(
+                          'auth_empty_master_password',
+                        );
                       }
 
                       if (value.length < 8) {
-                        return context
-                            .localeString('auth_too_short_master_password');
+                        return context.localeString(
+                          'auth_too_short_master_password',
+                        );
                       }
 
                       return null;
@@ -194,18 +187,13 @@ class LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                          context.localeString('auth_not_registered_question')),
+                        context.localeString('auth_not_registered_question'),
+                      ),
                       TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const RegisterPage(),
-                            ),
-                          );
-                        },
+                        onPressed: () => NavigatorPage.login(context),
                         child: Text(
-                            context.localeString('auth_not_registered_link')),
+                          context.localeString('auth_not_registered_link'),
+                        ),
                       ),
                     ],
                   ),

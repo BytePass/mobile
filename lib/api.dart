@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:bytepass/crypto.dart';
 import 'package:http/http.dart' as http;
 
-class APIClientReturn {
+class APIClientResponse {
   dynamic response;
   bool success;
   String? error;
 
-  APIClientReturn({
+  APIClientResponse({
     this.response,
     required this.success,
     this.error,
@@ -22,7 +22,7 @@ class APIClient {
   /// Domain or ip address of the BytePass server.
   static String domain = 'localhost:8080';
 
-  static Future<APIClientReturn> login(
+  static Future<APIClientResponse> login(
       String email, String masterPassword) async {
     email = email.toLowerCase();
 
@@ -39,13 +39,13 @@ class APIClient {
     var responseJson = json.decode(response.body);
 
     if (responseJson['success']) {
-      return APIClientReturn(success: true, response: responseJson);
+      return APIClientResponse(success: true, response: responseJson);
     }
 
-    return APIClientReturn(success: false, error: responseJson['message']);
+    return APIClientResponse(success: false, error: responseJson['message']);
   }
 
-  static Future<APIClientReturn> register(
+  static Future<APIClientResponse> register(
     String email,
     String masterPassword,
     String masterPasswordHint,
@@ -66,23 +66,23 @@ class APIClient {
     var responseJson = json.decode(response.body);
 
     if (responseJson['success']) {
-      return APIClientReturn(success: true, response: responseJson);
+      return APIClientResponse(success: true, response: responseJson);
     }
 
-    return APIClientReturn(success: false, error: responseJson['message']);
+    return APIClientResponse(success: false, error: responseJson['message']);
   }
 
-  static Future<APIClientReturn> whoami(String accessToken) async {
+  static Future<APIClientResponse> whoami(String accessToken) async {
     var response =
         await sendRequest('/api/user/whoami', accessToken: accessToken);
 
     var responseJson = json.decode(response.body);
 
     if (responseJson['success']) {
-      return APIClientReturn(success: true, response: responseJson);
+      return APIClientResponse(success: true, response: responseJson);
     }
 
-    return APIClientReturn(success: false, error: responseJson['message']);
+    return APIClientResponse(success: false, error: responseJson['message']);
   }
 
   /// Send request to the BytePass API.
@@ -97,6 +97,7 @@ class APIClient {
       'Accept': 'application/json',
     };
 
+    // put access token to the request headers
     if (accessToken != null) {
       headers.putIfAbsent('Authorization', () => 'Bearer $accessToken');
     }
@@ -104,15 +105,11 @@ class APIClient {
     // construct request URI
     var uri = Uri.http(domain, url);
 
-    // send request, and get the response
-    http.Response response;
-
+    // send request, and return the response
     if (body != null) {
-      response = await client.post(uri, body: body, headers: headers);
+      return await client.post(uri, body: body, headers: headers);
     } else {
-      response = await client.get(uri, headers: headers);
+      return await client.get(uri, headers: headers);
     }
-
-    return response;
   }
 }

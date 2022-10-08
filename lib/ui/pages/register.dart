@@ -1,5 +1,4 @@
 import 'package:bytepass/api.dart';
-import 'package:bytepass/ui/pages/login.dart';
 import 'package:bytepass/utils.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -53,12 +52,7 @@ class RegisterPageState extends State<RegisterPage> {
             content: context.localeString('register_successfully_toast'),
           );
 
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const LoginPage(),
-            ),
-          );
+          NavigatorPage.login(context);
         }
       } catch (error) {
         Utils.showSnackBar(
@@ -130,13 +124,15 @@ class RegisterPageState extends State<RegisterPage> {
                     controller: masterPasswordController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return context
-                            .localeString('auth_empty_master_password');
+                        return context.localeString(
+                          'auth_empty_master_password',
+                        );
                       }
 
                       if (value.length < 8) {
-                        return context
-                            .localeString('auth_too_short_master_password');
+                        return context.localeString(
+                          'auth_too_short_master_password',
+                        );
                       }
 
                       return null;
@@ -159,13 +155,15 @@ class RegisterPageState extends State<RegisterPage> {
                   TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return context
-                            .localeString('auth_empty_master_password');
+                        return context.localeString(
+                          'auth_empty_master_password',
+                        );
                       }
 
                       if (value != masterPasswordController.text) {
-                        return context
-                            .localeString('auth_match_master_password');
+                        return context.localeString(
+                          'auth_match_master_password',
+                        );
                       }
 
                       return null;
@@ -175,7 +173,8 @@ class RegisterPageState extends State<RegisterPage> {
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock),
                       hintText: context.localeString(
-                          'register_password_master_password_retype'),
+                        'register_password_master_password_retype',
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -192,7 +191,8 @@ class RegisterPageState extends State<RegisterPage> {
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.password),
                       hintText: context.localeString(
-                          'register_password_master_password_hint'),
+                        'register_password_master_password_hint',
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -212,9 +212,7 @@ class RegisterPageState extends State<RegisterPage> {
                           ),
                           child: Text(
                             context.localeString('register_page_button'),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                   const SizedBox(
@@ -226,16 +224,10 @@ class RegisterPageState extends State<RegisterPage> {
                     children: [
                       Text(context.localeString('auth_already_registered')),
                       TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LoginPage(),
-                            ),
-                          );
-                        },
-                        child: Text(context
-                            .localeString('auth_already_registered_link')),
+                        onPressed: () => NavigatorPage.login(context),
+                        child: Text(
+                          context.localeString('auth_already_registered_link'),
+                        ),
                       ),
                     ],
                   ),
