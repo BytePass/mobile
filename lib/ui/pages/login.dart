@@ -190,7 +190,7 @@ class LoginPageState extends State<LoginPage> {
                         context.localeString('auth_not_registered_question'),
                       ),
                       TextButton(
-                        onPressed: () => NavigatorPage.login(context),
+                        onPressed: () => NavigatorPage.register(context),
                         child: Text(
                           context.localeString('auth_not_registered_link'),
                         ),
