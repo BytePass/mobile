@@ -1,4 +1,4 @@
-import 'package:bytepass/api.dart';
+import 'package:bytepass/api/auth.dart';
 import 'package:bytepass/utils.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,7 @@ class RegisterPageState extends State<RegisterPage> {
       });
 
       try {
-        final response = await APIClient.register(
+        await AuthApi.register(
           emailController.text,
           masterPasswordController.text,
           masterPasswordHintController.text,
@@ -35,25 +35,14 @@ class RegisterPageState extends State<RegisterPage> {
 
         if (!mounted) return;
 
-        // show snack bar if error is returned
-        if (!response.success) {
-          final snackBar = SnackBar(content: Text(response.error ?? ''));
-
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-          setState(() {
-            loadingStuff = false;
-          });
-        }
         // registered successfully, redirect to login page
-        else {
-          Utils.showSnackBar(
-            context,
-            content: context.localeString('register_successfully_toast'),
-          );
+        Utils.showSnackBar(
+          context,
+          content: context.localeString('register_successfully_toast'),
+        );
 
-          NavigatorPage.login(context);
-        }
+        // navigate to login page
+        NavigatorPage.login(context);
       } catch (error) {
         Utils.showSnackBar(
           context,

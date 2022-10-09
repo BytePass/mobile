@@ -13,7 +13,7 @@
     "auth_not_registered_link": "Create an account",
     "auth_already_registered": "Already registered?",
     "auth_already_registered_link": "Sign in",
-    "register_successfully_toast": "Registered successfully! Please Sign in now.",
+    "register_successfully_toast": "Registered successfully! Please verify email address.",
     "logout_button": "Log out",
     "toast_retry": "Retry"
 }

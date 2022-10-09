@@ -5,12 +5,12 @@ import 'package:cryptography/cryptography.dart';
 import 'package:hex/hex.dart';
 
 class HashMasterPasswordArguments {
-  String email;
+  String salt;
   String masterPassword;
   SendPort sendPort;
 
   HashMasterPasswordArguments({
-    required this.email,
+    required this.salt,
     required this.masterPassword,
     required this.sendPort,
   });
@@ -49,7 +49,7 @@ class Cryptography {
     // construct a secret key
     final secretKey = SecretKey(utf8.encode(args.masterPassword));
     // encode the email to use it as a salt
-    final salt = utf8.encode(args.email);
+    final salt = utf8.encode(args.salt);
 
     // compute a hash
     final newSecretKey = await pbkdf2.deriveKey(
@@ -68,16 +68,16 @@ class Cryptography {
   }
 
   /// Run [Cryptography.hashMasterPassword] function as Isolate task.
-  static Future<String> hashMasterPasswordIsolated(
-    String email,
-    String masterPassword,
-  ) async {
+  static Future<String> hashMasterPasswordIsolated({
+    required String salt,
+    required String masterPassword,
+  }) async {
     ReceivePort receivePort = ReceivePort();
 
     await Isolate.spawn(
       hashMasterPassword,
       HashMasterPasswordArguments(
-        email: email,
+        salt: salt,
         masterPassword: masterPassword,
         sendPort: receivePort.sendPort,
       ),

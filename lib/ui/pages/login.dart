@@ -1,4 +1,4 @@
-import 'package:bytepass/api.dart';
+import 'package:bytepass/api/auth.dart';
 import 'package:bytepass/storage.dart';
 import 'package:bytepass/utils.dart';
 import 'package:email_validator/email_validator.dart';
@@ -30,44 +30,35 @@ class LoginPageState extends State<LoginPage> {
       String masterPassword = masterPasswordController.text;
 
       try {
-        final response = await APIClient.login(email, masterPassword);
+        final response = await AuthApi.login(email, masterPassword);
 
-        // show snack bar if error is returned
-        if (!response.success) {
-          if (!mounted) return;
+        // get access token and refresh token from API response
+        String accessToken = response.accessToken ?? '';
+        String refreshToken = response.refreshToken ?? '';
 
-          Utils.showSnackBar(
-            context,
-            content: response.error.toString(),
-            retryAction: _handleLogin,
-          );
+        // insert some variables into secure application storage
+        // access token
+        await Storage.insert(
+          key: StorageKey.accessToken,
+          value: accessToken,
+        );
+        // refresh token
+        await Storage.insert(
+          key: StorageKey.refreshToken,
+          value: refreshToken,
+        );
+        // email
+        await Storage.insert(
+          key: StorageKey.email,
+          value: email,
+        );
+        // master password
+        await Storage.insert(
+          key: StorageKey.masterPassword,
+          value: masterPassword,
+        );
 
-          setState(() {
-            loadingStuff = false;
-          });
-        } else {
-          // get access token from API response
-          String accessToken = response.response['accessToken'];
-
-          // insert some variables into secure application storage
-          // access token
-          await Storage.insert(
-            key: StorageKey.accessToken,
-            value: accessToken,
-          );
-          // email
-          await Storage.insert(
-            key: StorageKey.email,
-            value: email,
-          );
-          // master password
-          await Storage.insert(
-            key: StorageKey.masterPassword,
-            value: masterPassword,
-          );
-
-          if (mounted) NavigatorPage.home(context);
-        }
+        if (mounted) NavigatorPage.home(context);
       } catch (error) {
         Utils.showSnackBar(
           context,

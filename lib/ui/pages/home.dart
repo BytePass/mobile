@@ -1,4 +1,4 @@
-import 'package:bytepass/api.dart';
+import 'package:bytepass/api/user.dart';
 import 'package:bytepass/storage.dart';
 import 'package:bytepass/utils.dart';
 import 'package:flutter/material.dart';
@@ -33,20 +33,7 @@ class HomePageState extends State<HomePage> {
     }
 
     try {
-      final response = await APIClient.whoami(accessToken);
-
-      if (!response.success) {
-        if (!mounted) return;
-
-        Utils.showSnackBar(
-          context,
-          content: response.error.toString(),
-        );
-
-        if (mounted) NavigatorPage.login(context);
-
-        return;
-      }
+      await UserApi.whoami(accessToken);
     } catch (error) {
       if (!mounted) return;
 
@@ -54,6 +41,9 @@ class HomePageState extends State<HomePage> {
         context,
         content: error.toString(),
       );
+
+      // navigate to login page
+      NavigatorPage.login(context);
     }
 
     setState(() {
