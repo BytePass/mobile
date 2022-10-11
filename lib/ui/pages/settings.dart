@@ -1,6 +1,7 @@
 import 'package:bytepass/storage.dart';
 import 'package:bytepass/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -27,7 +28,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         sections: [
           SettingsSection(
-            title: const Text('Account'),
+            title: Text(context.localeString('settings_account_section')),
             tiles: [
               SettingsTile(
                 onPressed: (context) async {
@@ -35,14 +36,15 @@ class _SettingsPageState extends State<SettingsPage> {
 
                   if (mounted) NavigatorPage.login(context);
                 },
-                title: const Text('Log out'),
-                description: const Text('Delete all account data from application storage'),
+                title: Text(context.localeString('settings_logout_title')),
+                description:
+                    Text(context.localeString('settings_logout_description')),
                 leading: const Icon(Icons.logout),
               ),
             ],
           ),
           SettingsSection(
-            title: const Text('Other'),
+            title: Text(context.localeString('settings_other_section')),
             tiles: [
               SettingsTile(
                 onPressed: (context) async {
@@ -56,13 +58,19 @@ class _SettingsPageState extends State<SettingsPage> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: const Text('About'),
-                          content:
-                              Text('Application version: $version ($build)'),
+                          title: Text(
+                            context.localeString('settings_about_title'),
+                          ),
+                          content: Text(
+                            context
+                                .localeString('settings_about_description')
+                                .replaceAll('\$version', version)
+                                .replaceAll('\$build', build),
+                          ),
                         );
                       });
                 },
-                title: const Text('About'),
+                title: Text(context.localeString('settings_about_title')),
                 leading: const Icon(Icons.info),
               ),
             ],

@@ -15,5 +15,12 @@
     "auth_already_registered_link": "Sign in",
     "register_successfully_toast": "Registered successfully! Please verify email address.",
     "logout_button": "Log out",
-    "toast_retry": "Retry"
+    "toast_retry": "Retry",
+    "settings_account_section": "Account",
+    "settings_logout_title": "Log out",
+    "settings_logout_description": "Log out from your account",
+    "settings_other_section": "Other",
+    "settings_about_title": "About",
+    "settings_about_description": "Application version: $version ($build)",
+    "": ""
 }
