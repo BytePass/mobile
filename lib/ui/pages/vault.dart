@@ -4,14 +4,14 @@ import 'package:bytepass/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class VaultPage extends StatefulWidget {
+  const VaultPage({super.key});
 
   @override
-  State<HomePage> createState() => HomePageState();
+  State<VaultPage> createState() => _VaultPageState();
 }
 
-class HomePageState extends State<HomePage> {
+class _VaultPageState extends State<VaultPage> {
   bool loadingStuff = true;
 
   String email = '';

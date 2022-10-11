@@ -41,6 +41,9 @@ dependencies:
   http: ^0.13.5
   flutter_secure_storage: ^6.0.0
   flutter_locales: ^2.0.2
+  google_nav_bar: ^5.0.6
+  settings_ui: ^2.0.2
+  package_info_plus: ^2.0.0
 
 dev_dependencies:
   flutter_test:

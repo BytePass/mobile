@@ -1,5 +1,5 @@
 import 'package:bytepass/storage.dart';
-import 'package:bytepass/ui/pages/home.dart';
+import 'package:bytepass/ui/pages/dashboard.dart';
 import 'package:bytepass/ui/pages/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -42,7 +42,7 @@ class App extends StatelessWidget {
         themeMode: ThemeMode.system,
         theme: ThemeClass.lightTheme,
         darkTheme: ThemeClass.darkTheme,
-        home: loggedIn ? const HomePage() : const LoginPage(),
+        home: loggedIn ? const DashboardPage() : const LoginPage(),
         localizationsDelegates: Locales.delegates,
         supportedLocales: Locales.supportedLocales,
         locale: locale,

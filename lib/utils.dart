@@ -1,4 +1,4 @@
-import 'package:bytepass/ui/pages/home.dart';
+import 'package:bytepass/ui/pages/dashboard.dart';
 import 'package:bytepass/ui/pages/login.dart';
 import 'package:bytepass/ui/pages/register.dart';
 import 'package:flutter/material.dart';
@@ -48,8 +48,8 @@ class NavigatorPage {
     to(context, const RegisterPage());
   }
 
-  /// Navigate to [HomePage].
-  static void home(BuildContext context) {
-    to(context, const HomePage());
+  /// Navigate to [DashboardPage].
+  static void dashboard(BuildContext context) {
+    to(context, const DashboardPage());
   }
 }

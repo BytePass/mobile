@@ -58,7 +58,7 @@ class LoginPageState extends State<LoginPage> {
           value: masterPassword,
         );
 
-        if (mounted) NavigatorPage.home(context);
+        if (mounted) NavigatorPage.dashboard(context);
       } catch (error) {
         Utils.showSnackBar(
           context,
