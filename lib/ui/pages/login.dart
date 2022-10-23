@@ -85,6 +85,14 @@ class LoginPageState extends State<LoginPage> {
     }
   }
 
+  bool _passwordHide = true;
+
+  void _togglePasswordView() {
+    setState(() {
+      _passwordHide = !_passwordHide;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -154,9 +162,15 @@ class LoginPageState extends State<LoginPage> {
                       return null;
                     },
                     maxLines: 1,
-                    obscureText: true,
+                    obscureText: _passwordHide,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock),
+                      suffixIcon: InkWell(
+                        onTap: _togglePasswordView,
+                        child: Icon(_passwordHide
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                      ),
                       hintText: 'Master Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),

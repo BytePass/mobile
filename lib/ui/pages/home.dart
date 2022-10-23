@@ -15,8 +15,9 @@ class HomePage extends StatelessWidget {
       body: AnimatedSplashScreen(
         splash: Lottie.asset('assets/splash.json'),
         nextScreen: loggedIn ? const DashboardPage() : const LoginPage(),
-        splashIconSize: 420,
+        splashIconSize: 240,
         backgroundColor: Theme.of(context).colorScheme.background,
+        duration: 500,
       ),
     );
   }
