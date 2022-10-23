@@ -1,6 +1,7 @@
 import 'package:bytepass/ui/pages/dashboard.dart';
 import 'package:bytepass/ui/pages/login.dart';
 import 'package:bytepass/ui/pages/register.dart';
+import 'package:bytepass/ui/pages/vault_add_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
@@ -51,5 +52,12 @@ class NavigatorPage {
   /// Navigate to [DashboardPage].
   static void dashboard(BuildContext context) {
     to(context, const DashboardPage());
+  }
+
+  static void vaultAddItem(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const VaultAddItemPage()),
+    );
   }
 }

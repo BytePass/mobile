@@ -10,7 +10,7 @@ class Storage {
   }
 
   /// Get variable value from secure application storage.
-  static Future<String?> read({required String key}) async {
+  static Future<String?> read(String key) async {
     return await storage.read(key: key);
   }
 
@@ -31,4 +31,5 @@ class StorageKey {
   static String refreshToken = 'refreshToken';
   static String email = 'email';
   static String masterPassword = 'masterPassword';
+  static String aesSecretKey = 'aesPassword';
 }

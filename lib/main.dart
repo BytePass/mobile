@@ -8,7 +8,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Locales.init(['en']);
 
-  final accessToken = await Storage.read(key: StorageKey.accessToken);
+  final accessToken = await Storage.read(StorageKey.accessToken);
 
   bool loggedIn = false;
 

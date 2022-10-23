@@ -1,7 +1,11 @@
 import 'dart:convert';
 
 import 'package:bytepass/api/client.dart';
-import 'package:bytepass/crypto.dart';
+import 'package:bytepass/crypto/config.dart';
+import 'package:flutter/services.dart';
+import 'package:libcrypto/libcrypto.dart';
+
+final pbkdf2Hasher = Pbkdf2(iterations: CryptographyConfig.pbkdf2Iterations);
 
 class AuthApi {
   /// Send login request to the BytePass API.
@@ -12,14 +16,14 @@ class AuthApi {
     email = email.toLowerCase();
 
     // compute a hash of the master password
-    String masterPasswordHash = await Cryptography.hashMasterPasswordIsolated(
-      salt: email,
-      masterPassword: masterPassword,
+    masterPassword = await pbkdf2Hasher.sha256(
+      masterPassword,
+      Uint8List.fromList(utf8.encode(email)),
     );
 
     final body = json.encode({
       'email': email,
-      'masterPassword': masterPasswordHash,
+      'masterPassword': masterPassword,
     });
 
     final response = await ApiClient.send('/api/auth/login', body: body);
@@ -45,14 +49,14 @@ class AuthApi {
     email = email.toLowerCase();
 
     // compute a hash of the master password
-    String masterPasswordHash = await Cryptography.hashMasterPasswordIsolated(
-      salt: email,
-      masterPassword: masterPassword,
+    masterPassword = await pbkdf2Hasher.sha256(
+      masterPassword,
+      Uint8List.fromList(utf8.encode(email)),
     );
 
     final body = json.encode({
       'email': email,
-      'masterPassword': masterPasswordHash,
+      'masterPassword': masterPassword,
       'masterPasswordHint': masterPasswordHint,
     });
 

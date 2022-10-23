@@ -10,3 +10,22 @@ on:
 jobs:
   build-release:
     uses: ./.github/workflows/build-releases.yml
+
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Download dependencies
+        run: flutter pub get
+
+      - name: Run unit tests
+        run: flutter test

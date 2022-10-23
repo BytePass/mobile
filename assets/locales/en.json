@@ -22,5 +22,8 @@
     "settings_other_section": "Other",
     "settings_about_title": "About",
     "settings_about_description": "Application version: $version ($build)",
-    "": ""
+    "vault_add_item_name": "Name",
+    "vault_add_item_username": "Username",
+    "vault_add_item_password": "Password",
+    "vault_add_item_button": "Add item"
 }

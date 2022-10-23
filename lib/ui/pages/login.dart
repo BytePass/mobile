@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:bytepass/api/auth.dart';
 import 'package:bytepass/storage.dart';
 import 'package:bytepass/utils.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_locales/flutter_locales.dart';
+import 'package:libcrypto/libcrypto.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -56,6 +60,14 @@ class LoginPageState extends State<LoginPage> {
         await Storage.insert(
           key: StorageKey.masterPassword,
           value: masterPassword,
+        );
+        // aes secret key
+        final aesSecretKey = await Pbkdf2(iterations: 100000)
+            .sha256(masterPassword, Uint8List.fromList(utf8.encode(email)));
+
+        await Storage.insert(
+          key: StorageKey.aesSecretKey,
+          value: aesSecretKey,
         );
 
         if (mounted) NavigatorPage.dashboard(context);

@@ -23,8 +23,8 @@ class _VaultPageState extends State<VaultPage> {
   }
 
   Future _init() async {
-    final storageEmail = await Storage.read(key: StorageKey.email);
-    final accessToken = await Storage.read(key: StorageKey.accessToken);
+    final storageEmail = await Storage.read(StorageKey.email);
+    final accessToken = await Storage.read(StorageKey.accessToken);
 
     if (storageEmail == null || accessToken == null) {
       if (mounted) NavigatorPage.login(context);
@@ -62,6 +62,9 @@ class _VaultPageState extends State<VaultPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
+      appBar: AppBar(
+        title: const Text('Vault'),
+      ),
       body: Container(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -95,6 +98,11 @@ class _VaultPageState extends State<VaultPage> {
                   ),
                 ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => NavigatorPage.vaultAddItem(context),
+        tooltip: 'Add item',
+        child: const Icon(Icons.add),
       ),
     );
   }
