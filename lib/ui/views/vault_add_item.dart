@@ -9,10 +9,10 @@ class VaultAddItemPage extends StatefulWidget {
   const VaultAddItemPage({super.key});
 
   @override
-  State<VaultAddItemPage> createState() => _VaultAddItemPageState();
+  State<VaultAddItemPage> createState() => _State();
 }
 
-class _VaultAddItemPageState extends State<VaultAddItemPage> {
+class _State extends State<VaultAddItemPage> {
   final _formKey = GlobalKey<FormState>();
 
   bool loadingStuff = false;
@@ -46,7 +46,8 @@ class _VaultAddItemPageState extends State<VaultAddItemPage> {
 
         final accessToken = await Storage.read(StorageKey.accessToken);
 
-        await CiphersApi.insert(accessToken: accessToken!, cipherText: cipherText);
+        await CiphersApi.insert(
+            accessToken: accessToken!, cipherText: cipherText);
 
         if (!mounted) return;
 
@@ -80,8 +81,12 @@ class _VaultAddItemPageState extends State<VaultAddItemPage> {
               key: _formKey,
               child: Column(
                 children: [
-                  const Text(
+                  Text(
+                    textAlign: TextAlign.left,
                     'Item information',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
 
                   // Name
@@ -119,7 +124,7 @@ class _VaultAddItemPageState extends State<VaultAddItemPage> {
                   ),
 
                   // Password
-                  // TODO: add generator
+                  // TODO add generator
                   TextFormField(
                     controller: passwordController,
                     maxLines: 1,

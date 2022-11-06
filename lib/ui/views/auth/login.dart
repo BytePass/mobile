@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:bytepass/api/auth.dart';
-import 'package:bytepass/storage.dart';
+import 'package:bytepass/utils/storage.dart';
 import 'package:bytepass/utils.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -13,15 +13,18 @@ class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => LoginPageState();
+  State<LoginPage> createState() => _State();
 }
 
-class LoginPageState extends State<LoginPage> {
+class _State extends State<LoginPage> {
+  // create a form state
   final _formKey = GlobalKey<FormState>();
 
+  // create a text editing controllers
   TextEditingController emailController = TextEditingController();
   TextEditingController masterPasswordController = TextEditingController();
 
+  // state of loading stuff
   bool loadingStuff = false;
 
   Future _handleLogin() async {
@@ -30,6 +33,7 @@ class LoginPageState extends State<LoginPage> {
         loadingStuff = true;
       });
 
+      // get the email and master password from the text editing controllers
       String email = emailController.text;
       String masterPassword = masterPasswordController.text;
 
@@ -37,41 +41,27 @@ class LoginPageState extends State<LoginPage> {
         final response = await AuthApi.login(email, masterPassword);
 
         // get access token and refresh token from API response
-        String accessToken = response.accessToken ?? '';
-        String refreshToken = response.refreshToken ?? '';
+        String accessToken = response.accessToken!;
+        String refreshToken = response.refreshToken!;
 
-        // insert some variables into secure application storage
+        // insert some variables into application storage
         // access token
-        await Storage.insert(
-          key: StorageKey.accessToken,
-          value: accessToken,
-        );
+        await Storage.insert(StorageKey.accessToken, accessToken);
         // refresh token
-        await Storage.insert(
-          key: StorageKey.refreshToken,
-          value: refreshToken,
-        );
+        await Storage.insert(StorageKey.refreshToken, refreshToken);
         // email
-        await Storage.insert(
-          key: StorageKey.email,
-          value: email,
-        );
-        // master password
-        await Storage.insert(
-          key: StorageKey.masterPassword,
-          value: masterPassword,
-        );
+        await Storage.insert(StorageKey.email, email);
+
         // aes secret key
         final aesSecretKey = await Pbkdf2(iterations: 100000)
             .sha256(masterPassword, Uint8List.fromList(utf8.encode(email)));
 
-        await Storage.insert(
-          key: StorageKey.aesSecretKey,
-          value: aesSecretKey,
-        );
+        await Storage.insert(StorageKey.aesSecretKey, aesSecretKey);
 
+        // navigate to dashboard
         if (mounted) NavigatorPage.dashboard(context);
       } catch (error) {
+        // show snack bar with error message
         Utils.showSnackBar(
           context,
           content: error.toString(),
@@ -85,8 +75,10 @@ class LoginPageState extends State<LoginPage> {
     }
   }
 
+  // show/hide password
   bool _passwordHide = true;
 
+  // toogle password visibility
   void _togglePasswordView() {
     setState(() {
       _passwordHide = !_passwordHide;
@@ -132,7 +124,9 @@ class LoginPageState extends State<LoginPage> {
                         : context.localeString('auth_invalid_email'),
                     maxLines: 1,
                     decoration: InputDecoration(
-                      hintText: 'Email',
+                      hintText: context.localeString(
+                        'auth_field_email',
+                      ),
                       prefixIcon: const Icon(Icons.email),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -171,7 +165,9 @@ class LoginPageState extends State<LoginPage> {
                             ? Icons.visibility
                             : Icons.visibility_off),
                       ),
-                      hintText: 'Master Password',
+                      hintText: context.localeString(
+                        'auth_field_master_password',
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),

@@ -8,16 +8,19 @@ class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
   @override
-  State<RegisterPage> createState() => RegisterPageState();
+  State<RegisterPage> createState() => _State();
 }
 
-class RegisterPageState extends State<RegisterPage> {
+class _State extends State<RegisterPage> {
+  // create a form state
   final _formKey = GlobalKey<FormState>();
 
+  // create a text editing controllers
   TextEditingController emailController = TextEditingController();
   TextEditingController masterPasswordController = TextEditingController();
   TextEditingController masterPasswordHintController = TextEditingController();
 
+  // state of loading stuff
   bool loadingStuff = false;
 
   Future _handleRegister() async {
@@ -26,11 +29,16 @@ class RegisterPageState extends State<RegisterPage> {
         loadingStuff = true;
       });
 
+      // get the email, master password and master password hint from the text editing controllers
+      String email = emailController.text;
+      String masterPassword = masterPasswordController.text;
+      String masterPasswordHint = masterPasswordHintController.text;
+
       try {
         await AuthApi.register(
-          emailController.text,
-          masterPasswordController.text,
-          masterPasswordHintController.text,
+          email,
+          masterPassword,
+          masterPasswordHint,
         );
 
         if (!mounted) return;
@@ -57,8 +65,10 @@ class RegisterPageState extends State<RegisterPage> {
     }
   }
 
+  // show/hide password
   bool _passwordHide = true;
 
+  // toogle password visibility
   void _togglePasswordView() {
     setState(() {
       _passwordHide = !_passwordHide;
@@ -105,7 +115,9 @@ class RegisterPageState extends State<RegisterPage> {
                         : context.localeString('auth_invalid_email'),
                     maxLines: 1,
                     decoration: InputDecoration(
-                      hintText: 'Email',
+                      hintText: context.localeString(
+                        'auth_field_email',
+                      ),
                       prefixIcon: const Icon(Icons.email),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -144,7 +156,9 @@ class RegisterPageState extends State<RegisterPage> {
                             ? Icons.visibility
                             : Icons.visibility_off),
                       ),
-                      hintText: 'Master Password',
+                      hintText: context.localeString(
+                        'auth_field_master_password',
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),

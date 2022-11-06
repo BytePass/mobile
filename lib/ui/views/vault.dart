@@ -8,10 +8,10 @@ class VaultPage extends StatefulWidget {
   const VaultPage({super.key});
 
   @override
-  State<VaultPage> createState() => _VaultPageState();
+  State<VaultPage> createState() => _State();
 }
 
-class _VaultPageState extends State<VaultPage> {
+class _State extends State<VaultPage> {
   bool loadingStuff = true;
 
   String email = '';

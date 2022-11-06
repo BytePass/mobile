@@ -1,5 +1,5 @@
 import 'package:bytepass/storage.dart';
-import 'package:bytepass/ui/pages/home.dart';
+import 'package:bytepass/ui/views/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 

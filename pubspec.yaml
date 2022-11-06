@@ -25,6 +25,7 @@ dependencies:
   package_info_plus: ^3.0.1
   libcrypto: ^0.2.1
   page_transition: ^2.0.9
+  memory_cache: ^1.1.0
 
 dev_dependencies:
   flutter_test:

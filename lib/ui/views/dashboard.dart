@@ -1,5 +1,5 @@
-import 'package:bytepass/ui/pages/vault.dart';
-import 'package:bytepass/ui/pages/settings.dart';
+import 'package:bytepass/ui/views/vault.dart';
+import 'package:bytepass/ui/views/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
@@ -7,10 +7,11 @@ class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
 
   @override
-  State<DashboardPage> createState() => _DashboardPageState();
+  State<DashboardPage> createState() => _State();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _State extends State<DashboardPage> {
+  // currently page
   dynamic page = const VaultPage();
 
   void _handlePageChange(int index) {

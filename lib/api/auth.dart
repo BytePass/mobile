@@ -36,7 +36,7 @@ class AuthApi {
         refreshToken: responseJson['refreshToken'],
       );
     } else {
-      throw responseJson['message'];
+      throw Exception(responseJson['message']);
     }
   }
 
@@ -67,7 +67,7 @@ class AuthApi {
     if (responseJson['success']) {
       return;
     } else {
-      throw responseJson['message'];
+      throw Exception(responseJson['message']);
     }
   }
 }

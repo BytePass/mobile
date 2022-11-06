@@ -5,6 +5,8 @@
     "register_page_button": "Sign up",
     "register_password_master_password_retype": "Re-type Master Password",
     "register_password_master_password_hint": "Master Password hint (optional)",
+    "auth_field_email": "Email",
+    "auth_field_master_password": "Master Password",
     "auth_invalid_email": "Please enter a valid email",
     "auth_empty_master_password": "Please enter your master password",
     "auth_too_short_master_password": "Master password must be at least 8 characters long",
